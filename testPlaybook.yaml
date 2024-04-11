@@ -1,0 +1,19 @@
+config:
+  connection:
+    platform: vaas
+    credentials:
+      tokenURL: https://api.venafi.cloud/v1/oauth2/v2.0/9acdfbc1-367b-11eb-953d-c7764eb2f94f/token
+      externalJWT: 'file:./.jwt'
+certificateTasks:
+  - name: myCertificate
+    renewBefore: 31d
+    request:
+      csr: local  
+      subject:
+        commonName: '{{ Hostname | ToLower -}}.lab.beardedprincess.com'
+      zone: GerbilFood\Default
+    installations:
+      - format: PEM
+        file: "/tmp/cert.cer"
+        chainFile: "/tmp/chain.cer"
+        keyFile: "/tmp/key.pem"
