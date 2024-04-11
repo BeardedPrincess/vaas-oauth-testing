@@ -86,20 +86,20 @@ echo -e "JWT_ISSUER: ${GRN}${JWT_ISSUER}${NC}"
 echo -e "JWT_JWKS_URI: ${GRN}${JWT_JWKS_URI}${NC}"
 echo '============================================================'
 
-# echo -e '\n\n============== Sending to VaaS for API Token ==============='
-# VAAS_RESULT=`curl --silent --location "https://api.venafi.cloud/v1/oauth2/v2.0/${VAAS_TENANT_ID}/token" \
-#     --header 'Content-Type: application/x-www-form-urlencoded' \
-#     --data-urlencode 'grant_type=client_credentials' \
-#     --data-urlencode "client_assertion=${JWT}" \
-#     --data-urlencode 'client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer'`
+echo -e '\n\n============== Sending to VaaS for API Token ==============='
+VAAS_RESULT=`curl --silent --location "https://api.venafi.cloud/v1/oauth2/v2.0/${VAAS_TENANT_ID}/token" \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --data-urlencode 'grant_type=client_credentials' \
+    --data-urlencode "client_assertion=${JWT}" \
+    --data-urlencode 'client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer'`
 
-# echo -e "\tResult:\n\t${VAAS_RESULT}"
+echo -e "\tResult:\n\t${VAAS_RESULT}"
 
-# VAAS_ACCESS_TOKEN=$(echo ${VAAS_RESULT} | jq '.access_token')
-# if [ "${VAAS_ACCESS_TOKEN}" != "null" ]; then
-#   export VAAS_ACCESS_TOKEN
-#   echo -e "\n\n${GRN}VaaS access_token available as \$VAAS_ACCESS_TOKEN${NC}"
-# fi
+VAAS_ACCESS_TOKEN=$(echo ${VAAS_RESULT} | jq '.access_token')
+if [ "${VAAS_ACCESS_TOKEN}" != "null" ]; then
+  export VAAS_ACCESS_TOKEN
+  echo -e "\n\n${GRN}VaaS access_token available as \$VAAS_ACCESS_TOKEN${NC}"
+fi
 
 echo '===================== TEST VCERT PLAYBOOK ============================'
 vcert run -f testPlaybook.yaml -d --force-renew
